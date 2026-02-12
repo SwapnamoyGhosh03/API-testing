@@ -1,0 +1,131 @@
+openapi: 3.0.0
+info:
+  description: An API to manage Books
+  title: The Bookstore API
+  version: 1.0.0
+servers:
+- url: http://localhost:8080/api/v1
+paths:
+  /books:
+    get:
+      operationId: books_get
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Book"
+                type: array
+          description: A successful list of books
+      summary: Get a list of all books
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+    post:
+      operationId: books_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Book"
+        required: true
+      responses:
+        "201":
+          description: Book created successfully
+        "400":
+          description: Invalid input
+      summary: Add a new book
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /books/{bookId}:
+    delete:
+      operationId: books_book_id_delete
+      parameters:
+      - explode: false
+        in: path
+        name: bookId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "204":
+          description: Book deleted successfully
+        "404":
+          description: Book not found
+      summary: Delete a book by ID
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+    get:
+      operationId: books_book_id_get
+      parameters:
+      - explode: false
+        in: path
+        name: bookId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Book"
+          description: Book is found
+        "404":
+          description: Book is not found
+      summary: Find a book by its ID
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+    put:
+      operationId: books_book_id_put
+      parameters:
+      - explode: false
+        in: path
+        name: bookId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Book"
+        required: true
+      responses:
+        "200":
+          description: Book updated successfully
+        "400":
+          description: Invalid input
+        "404":
+          description: Book not found
+      summary: Update an existing book
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+components:
+  schemas:
+    Book:
+      example:
+        author: Vishwas K Singh
+        available: true
+        id: 100
+        title: A Book
+      properties:
+        id:
+          example: 100
+          title: id
+          type: integer
+        title:
+          example: A Book
+          title: title
+          type: string
+        author:
+          example: Vishwas K Singh
+          title: author
+          type: string
+        available:
+          example: true
+          title: available
+          type: boolean
+      required:
+      - author
+      - title
+      title: Book
+      type: object
